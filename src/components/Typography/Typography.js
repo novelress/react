@@ -1,18 +1,15 @@
 import React from "react";
 import "./Typography.css";
 
-const Typography = ({ fontSize, onClick }) => {
-  const textStyle = {
-    fontSize: fontSize,
-  };
-
+const Typography = ({ size }) => {
   return (
-    <p onClick={onClick} style={textStyle} className="typography">
+    <p className={`typography typography__size_${size}`}>
       Привет
     </p>
   );
 };
 
 export default Typography;
+
 
 

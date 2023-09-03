@@ -6,7 +6,7 @@ import Typography from './components/Typography/Typography.js';
 
 const App = () => {
   const [type, setType] = useState("filled");
-  const [fontSize, setFontSize] = useState("16px"); // добавляем изначальный размер
+  const [fontSize, setFontSize] = useState("s"); 
 
   const toggleButton = () => {
     if(type === "filled") {
@@ -17,9 +17,9 @@ const App = () => {
     
     // изменяем размер текста при клике на кнопку
     setFontSize((prevSize) => {
-      if (prevSize === "16px") return "20px"; // если текст 16рх делаем его 20
-      if (prevSize === "20px") return "24px"; // если 20 то 24
-      if (prevSize === "24px") return "16px"; // если 24 то 16
+      if (prevSize === "s") return "m";
+      if (prevSize === "m") return "l";
+      if (prevSize === "l") return "s";
     });
   }
 
@@ -31,15 +31,15 @@ const App = () => {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <Button onClick={toggleButton} type={type}>кнопка</Button>
-        {/* <Button type="outlined">чето другое</Button> */}
-        
-        <Typography fontSize={fontSize} onClick={toggleButton} />
+        <Typography size={fontSize} />
       </header>
     </div>
   );
 }
 
 export default App;
+
+
 
 
 
