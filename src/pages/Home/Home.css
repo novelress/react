@@ -1,0 +1,11 @@
+.popular-movies {
+    display: flex;
+}
+
+.movie-item {
+    width: 300px;
+}
+
+.movie-details {
+    width: 200px;
+}
