@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AUTH_TOKEN } from "../../helpers/helpers";
 import "../Home/Home.css";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import MovieCard from "../../widgets/MovieCard/MovieCard";
 
 const Home = () => {
   const [movieslist, setMoviesList] = useState(null);
@@ -39,7 +40,7 @@ const Home = () => {
       .then((response) => response.json())
       .then((response) => {
         setMoviesList(response.results);
-        setVisibleMovies(response.results.slice(0, 8));
+        setVisibleMovies(response.results.slice(0, 5));
       })
       .catch((err) => console.error(err));
   }, []);
@@ -47,6 +48,7 @@ const Home = () => {
   if (!movieslist) {
     return <p>Loading...</p>;
   }
+  console.log(movieslist);
 
   const toggleShowAll = () => {
     setShowAll(!showAll);
@@ -55,29 +57,15 @@ const Home = () => {
     } else {
       setVisibleMovies(movieslist);
     }
+    
   };
-
   return (
     <div>
       <p>Home Page</p>
       <h1>Список популярных фильмов</h1>
       <div className="movie-list">
         {visibleMovies.map((movie, index) => (
-          <div className="movie-item" key={index}>
-            <img
-              className="movie-image"
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-            />
-            <div className="movie-details">
-              <p className="movie-name">
-                {movie.title} {movie.release_date.slice(0, 4)}
-              </p>
-              <p className="movie-genre">
-                Жанр: {movie.genre_ids.map((id) => genres[id]).join(", ")}
-              </p>
-            </div>
-          </div>
+          <MovieCard movie={movie} key={index} genres={genres} />
         ))}
       </div>
       <button className="showButton" onClick={toggleShowAll}>
