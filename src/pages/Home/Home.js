@@ -65,7 +65,7 @@ const Home = () => {
       <h1>Список популярных фильмов</h1>
       <div className="movie-list">
         {visibleMovies.map((movie, index) => (
-          <MovieCard movie={movie} key={index} genres={genres} />
+          <MovieCard movie={movie} key={index} genres={genres} voteAverage={movie.vote_average} />
         ))}
       </div>
       <button className="showButton" onClick={toggleShowAll}>
