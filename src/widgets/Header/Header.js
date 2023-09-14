@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,19 +12,27 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import TextField from '@mui/material/TextField';
+import searchIcon from '../../Assets/Search/search.svg';
 
 const pages = ['Movies', 'Cartoons', 'Series And Shows'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Header = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [isSearchOpen, setSearchOpen] = useState(false);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+  };
+
+  const handleSearchIconClick = () => {
+    setSearchOpen(!isSearchOpen);
   };
 
   const handleCloseNavMenu = () => {
@@ -36,12 +44,12 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#111111', height: '70px' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
-            variant="h6"
+            variant="body1"
             noWrap
             component="a"
             href="/"
@@ -55,7 +63,7 @@ const Header = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            CEVCODE
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -124,7 +132,20 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {isSearchOpen && (
+              <TextField
+                id="filled-search"
+                label="Search field"
+                type="search"
+                variant="filled"
+                fullWidth
+              />
+            )}
+            <IconButton onClick={handleSearchIconClick}>
+              <img src={searchIcon} alt="Search" />
+            </IconButton>
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -158,5 +179,7 @@ const Header = () => {
       </Container>
     </AppBar>
   );
-}
+};
+
 export default Header;
+

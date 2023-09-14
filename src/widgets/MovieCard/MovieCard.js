@@ -7,7 +7,7 @@ import Rating from '@mui/material/Rating';
 import { CardActionArea, dividerClasses } from '@mui/material';
 
 const MovieCard = ({ movie, genres, voteAverage }) => {
-  const { poster_path, title, genre_ids, release_date, vote_average } = movie;
+  const { poster_path, title, genre_ids, release_date } = movie;
   const cardStyle = {
     width: 150,
     margin: '10px',
@@ -47,7 +47,6 @@ const MovieCard = ({ movie, genres, voteAverage }) => {
               </Typography>
               <Typography sx={{ ...ratingContainerStyle }}>
                 <Rating name="movie-rating" sx={{ textAlign: 'left', }} value={voteAverage / 2} readOnly />
-                {/* стили для звездочек рейтинга */}
                 <style> 
                   {`
                     .MuiPaper-root {
