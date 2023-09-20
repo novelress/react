@@ -14,11 +14,26 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import TextField from '@mui/material/TextField';
 import searchIcon from '../../Assets/Search/search.svg';
+import { useNavigate } from "react-router-dom";
 
-const pages = ['Movies', 'Cartoons', 'Series And Shows'];
+const pages = [
+  {
+    name: 'Movies',
+    to: "movies"
+  },
+  {
+    name: 'Cartoons',
+    to: "cartoons"
+  },
+  {
+    name: 'Series And Shows',
+    to: "series-and-shows",
+  },
+]
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Header = () => {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isSearchOpen, setSearchOpen] = useState(false);
@@ -42,6 +57,11 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const onNavigate = (to) => {
+    handleCloseNavMenu();
+    navigate(to);
+  }
 
   return (
     <AppBar position="static" sx={{ backgroundColor: '#111111', height: '70px' }}>
@@ -96,8 +116,8 @@ const Header = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={() => onNavigate(page.to)}>
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -124,11 +144,11 @@ const Header = () => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.name}
+                onClick={() => onNavigate(page.to)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>

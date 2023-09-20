@@ -13,6 +13,10 @@ const MainSliderContainer = styled.div`
   margin: 0 auto;
 `;
 
+const StyledSliderImage = styled.img`
+  width: 100%;
+`
+
 const StyledSliderWrapper = styled.div`
   width: 100%;
   position: relative;
@@ -21,7 +25,13 @@ const StyledSliderWrapper = styled.div`
     border-radius: 0px;
     content: "";
     width: 30px;
-    background-color: transparent;
+    background-image: url(${arrowRight});
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height: 30px;
+    position: absolute;
+    top: 5px;
+    left: 0;
   } 
 
   .slick-arrow {
@@ -30,11 +40,9 @@ const StyledSliderWrapper = styled.div`
     z-index: 10;
     width: 40px;
     height: 40px;
-    background-image: url(${arrowRight});
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-color: transparent;
     transition: background-color 0.3s;
+    margin: 0;
+    padding: 0;
   }
 
   .slick-arrow:hover {
@@ -42,7 +50,7 @@ const StyledSliderWrapper = styled.div`
   }
 
   .slick-prev {
-    transform: scale(-1, 1);
+    transform: rotate(180deg);
     left: 100px;
   }
 `;
@@ -61,13 +69,13 @@ const MainSlider = () => {
       <StyledSliderWrapper>
         <Slider {...settings}>
           <Box>
-            <img src={MainSlider1} alt="Image 1" />
+            <StyledSliderImage src={MainSlider1} alt="Image 1" />
           </Box>
           <Box>
-            <img src={MainSlider2} alt="Image 2" />
+            <StyledSliderImage src={MainSlider2} alt="Image 2" />
           </Box>
           <Box>
-            <img src={MainSlider3} alt="Image 3" />
+            <StyledSliderImage src={MainSlider3} alt="Image 3" />
           </Box>
         </Slider>
       </StyledSliderWrapper>

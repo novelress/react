@@ -5,9 +5,10 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 import { CardActionArea, dividerClasses } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const MovieCard = ({ movie, genres, voteAverage }) => {
-  const { poster_path, title, genre_ids, release_date } = movie;
+  const { id, poster_path, title, genre_ids, release_date } = movie;
   const cardStyle = {
     width: 150,
     margin: '10px',
@@ -30,6 +31,7 @@ const MovieCard = ({ movie, genres, voteAverage }) => {
   };
 
   return (
+    <Link to={`/moviePage/${id}/${title}`}>
         <Card sx={{ ...cardStyle, ...cardHoverStyle }}>
           <CardActionArea>
             <CardMedia sx={{ marginBottom: "10px" }}
@@ -65,6 +67,7 @@ const MovieCard = ({ movie, genres, voteAverage }) => {
             </CardContent>
           </CardActionArea>
         </Card>
+    </Link>
   );
 }
 
