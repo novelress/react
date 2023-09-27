@@ -31,7 +31,7 @@ const MovieCard = ({ movie, genres, voteAverage }) => {
   };
 
   return (
-    <Link to={`/moviePage/${id}/${title}`}>
+    <Link to={`/moviePage/${id}`}>
         <Card sx={{ ...cardStyle, ...cardHoverStyle }}>
           <CardActionArea>
             <CardMedia sx={{ marginBottom: "10px" }}

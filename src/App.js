@@ -24,14 +24,14 @@ const App = () => {
   return (
     <BrowserRouter basename="/">
       <Box className="App" sx={{ height: "100vh" }}>
-        <Box sx={{ maxWidth: "85%", margin: "0 auto", backgroundColor: "white", height: "100vh" }}>
+        <Box sx={{ maxWidth: "70%", margin: "0 auto", backgroundColor: "white", height: "100vh" }}>
           <Header />
           <Routes>
             <Route path="/movies" element={<Movies />} />
             <Route path="/cartoons" element={<Cartoons/>} />
             <Route path="/" element={<Home />}/>
             <Route path="/series-and-shows" element={<SeriesAndShows/>}/>
-            <Route path="/moviePage" element={<MoviePage />} />
+            <Route path="/moviePage/:movieId" element={<MoviePage />} />
           </Routes>
         </Box>
       </Box>
