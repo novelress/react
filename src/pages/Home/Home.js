@@ -86,21 +86,22 @@ const Home = () => {
   }
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     arrows: true,
     speed: 500,
     slidesToShow: 5,
     slidesToScroll: 5,
   };
+  
 
 
   return (
     <Box>
       <MainSlider></MainSlider>
-        <Box sx={{ maxWidth: "780px", margin: "0 auto", }}>
+        <Box sx={{ maxWidth: "1050px", margin: "0 auto", }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", paddingRight: '5px' }}>
-            <Typography sx={{ textAlign: "left", marginRight: "0px", flex: "0 0 50%" }}>Best Rating</Typography>
+            <Typography sx={{ textAlign: "left", marginRight: "0px", flex: "0 0 50%", fontSize: "20px" }}>Best Rating</Typography>
           </Box>
           <StyledSliderWrapper>
             <Slider className="movies-slider" {...settings} ref={sliderRef}>

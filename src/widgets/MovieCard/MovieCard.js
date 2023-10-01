@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 const MovieCard = ({ movie, genres, voteAverage }) => {
   const { id, poster_path, title, genre_ids, release_date } = movie;
   const cardStyle = {
-    width: 150,
+    width: 200,
     margin: '10px',
     boxShadow: 'none',
     transition: 'color 0.7s',
@@ -31,20 +31,20 @@ const MovieCard = ({ movie, genres, voteAverage }) => {
   };
 
   return (
-    <Link to={`/moviePage/${id}`}>
+    <Link to={`/moviePage/${id}`} style={{ textDecoration: "none" }}>
         <Card sx={{ ...cardStyle, ...cardHoverStyle }}>
           <CardActionArea>
-            <CardMedia sx={{ marginBottom: "10px" }}
+            <CardMedia sx={{ marginBottom: "7px" }}
               component="img"
-              height="200"
+              height="300"
               image={`https://image.tmdb.org/t/p/w500${poster_path}`}
               alt={title}
             />
             <CardContent sx={{ padding: "0px" }}>
-              <Typography className='HoverTypography' variant="h6" sx={{ fontSize: '10px', marginBottom: "5px", width: "150px", textAlign: 'left', }} color="text.primary">
+              <Typography className='HoverTypography' variant="h6" sx={{ fontSize: '15px', marginBottom: "5px", width: "200px", textAlign: 'left', }} color="text.primary">
                 <strong>{title}</strong>
               </Typography>
-              <Typography variant="body2" sx={{ fontSize: '10px', textAlign: 'left', }} color="text.secondary">
+              <Typography variant="body2" sx={{ fontSize: '15px', textAlign: 'left', }} color="text.secondary">
               {release_date.slice(0, 4)}, {genres[genre_ids[0]]}
               </Typography>
               <Typography sx={{ ...ratingContainerStyle }}>
@@ -61,7 +61,7 @@ const MovieCard = ({ movie, genres, voteAverage }) => {
                   `}
                 </style>
               </Typography>
-              <Typography variant="h6" sx={{ fontSize: '10px', marginBottom: "5px", width: "150px", textAlign: 'left', fontWeight: 700, color: "Gray" }}>
+              <Typography variant="h6" sx={{ fontSize: '15px', marginBottom: "5px", width: "200px", textAlign: 'left', fontWeight: 700, color: "Gray" }}>
                 FOR FREE
                 </Typography>
             </CardContent>
