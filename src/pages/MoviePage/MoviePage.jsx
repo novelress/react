@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Typography, Box, Tabs, Tab } from '@mui/material';
 import styled from "@emotion/styled";
 import GradeSharpIcon from '@mui/icons-material/GradeSharp';
@@ -16,7 +16,10 @@ const MoviePage = () => {
   const [movieData, setMovieData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [castData, setCastData] = useState([]);
+  const [movieVideoData, setMovieVideoData] = useState([]);
+  const [movieVideoSiteData, setMovieVideoSiteData] = useState([]);
   const [activeSection, setActiveSection] = useState(0);
+  const location = useLocation();
 
   useEffect(() => {
     const options = {
@@ -42,14 +45,60 @@ const MoviePage = () => {
         .then(response => response.json())
         .then(response => setCastData(response.cast))
         .catch(err => console.error(err));
+      
+      fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, options)
+        .then(response => response.json())
+        .then(response => {
+          if (Array.isArray(response.results) && response.results.length > 0) {
+            const trailerVideo = response.results.find(video => video.name === "Official Trailer");
+            if (trailerVideo) {
+              setMovieVideoData(trailerVideo.key);
+              setMovieVideoSiteData(trailerVideo.site);
+            }
+          }
+        })
+        .catch(err => console.error(err));
+
         
 
     }
   }, [movieId]);
 
+  
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('movieId') !== movieId) {
+      hideVideoPlayer();
+    }
+  }, [location.search, movieId]);
+  
+
+  const hideVideoPlayer = () => {
+    setMovieVideoData([]);
+  }
+
+
   const handleTabChange = (event, newValue) => {
     setActiveSection(newValue);
   };
+
+  const renderVideo = () => {
+    if(movieVideoData.length > 0 && movieVideoSiteData === "YouTube") {
+      return (
+        <iframe
+          width="100%"
+          height="100%"
+          src={`https://www.youtube.com/embed/${movieVideoData}?si=NgQtVfLQoPJP73Xq&rel=0&showinfo=0&modestbranding=1`}
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      )
+    }
+    return null;
+  }
 
   if (isLoading) {
     return <Typography>Loading...</Typography>;
@@ -59,8 +108,9 @@ const MoviePage = () => {
     return null;
   }
 
-  // console.log(movieData);
-  console.log(movieData);
+
+
+  const formattedBudget = (movieData.budget / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
   return (
     <Box>
@@ -72,15 +122,44 @@ const MoviePage = () => {
           height: "650px",
           backgroundRepeat: "no-repeat",
           backgroundPosition: 'center',
+          '@media (max-width: 992px)': {
+            height: "500px",
+          },
+          '@media (max-width: 480px)': {
+            height: "250px",
+          },
         }}
       >
-        {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/vS3_72Gb-bI?si=NgQtVfLQoPJP73Xq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> */}
+        {renderVideo()}
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center", height: "150px", backgroundColor: "black", }} >
-        <Box sx={{ width: "20%", backgroundImage: `url('https://image.tmdb.org/t/p/w500${movieData.backdrop_path}')`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "cover", height: "100%", marginRight: "30px" }}>
+      <Box sx={{ 
+        display: "flex", 
+        alignItems: "center", 
+        height: "150px", 
+        backgroundColor: "black", 
+        '@media (max-width: 992px)': {
+          height: "120px",
+        },
+        '@media (max-width: 480px)': {
+          height: "100px",
+        },
+      }} >
+        <Box sx={{ 
+          width: "20%", 
+          backgroundImage: `url('https://image.tmdb.org/t/p/w500${movieData.backdrop_path}')`, 
+          backgroundRepeat: "no-repeat", backgroundPosition: 'center', 
+          backgroundSize: "cover", height: "100%", 
+          marginRight: "30px",
+          '@media (max-width: 992px)': {
+            width: "30%", 
+          },
+          '@media (max-width: 480px)': {
+            width: "35%", 
+          },
+        }}>
         </Box>
-        <Typography sx={{ textAlign: "left", color: "#FFFFFF", fontSize: "30px" }}>
-          {movieData.title}
+        <Typography sx={{ textAlign: "left", color: "#FFFFFF", fontSize: "25px" }}>
+          {movieData.title} {movieData.release_date.slice(0, 4)}
         </Typography>
       </Box>
       <Box sx={{ padding: '30px 50px' }}>
@@ -95,31 +174,32 @@ const MoviePage = () => {
         </Box>
         {activeSection === 0 && (
           <Box sx={{ padding: '30px 50px' }}>
-            <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
+            <Typography sx={{ textAlign: "left", marginBottom: "10px", fontWeight: "bold", color: "rgba(0, 0, 0, 0.7)" }}>
               {movieData.release_date.slice(0, 4)},{movieData.genres.map(genre => genre.name).join(", ")}
             </Typography>
             <Box sx={{ display: "flex" }}>
-              <Typography sx={{ marginBottom: "10px", fontSize: "13px", textAlign: "left", width: "5%", display: "flex", justifyContent: "center", padding: "2px 5px 0", border: "1px solid #ccc", borderRadius: "3px", color: "gray", marginRight: "5px" }}>
+              <Typography sx={{ marginBottom: "10px", fontSize: "13px", textAlign: "left", width: "5%", display: "flex", justifyContent: "center", padding: "2px 5px 0", border: "1px solid #ccc", borderRadius: "3px", color: "gray", marginRight: "5px", '@media (max-width: 992px)': { width: "25%", }, }}>
                 Full HD
               </Typography>
-              <Typography sx={{ marginBottom: "10px", fontSize: "13px", textAlign: "left", width: "5%", display: "flex", justifyContent: "center", padding: "2px 5px 0", border: "1px solid #ccc", borderRadius: "3px", color: "gray", }}>
+              <Typography sx={{ marginBottom: "10px", fontSize: "13px", textAlign: "left", width: "5%", display: "flex", justifyContent: "center", padding: "2px 5px 0", border: "1px solid #ccc", borderRadius: "3px", color: "gray", '@media (max-width: 992px)': { width: "25%", },}}>
                 {movieData.runtime ? `${Math.floor(movieData.runtime / 60)}h ${movieData.runtime % 60}m` : 'N/A'}
               </Typography>
             </Box>
-            <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
-              Rating: {movieData.vote_average ? movieData.vote_average : 'N/A'}
+            <Typography sx={{ textAlign: "left", marginBottom: "10px", display: 'flex', }}>
+              Rating: <Typography sx={{ textAlign: "left", marginLeft: "5px", width: '50%', color: movieData.vote_average > '6.999' ? "green" : movieData.vote_average > '3.999' ? "orange" : "red", }}>{movieData.vote_average ? movieData.vote_average.toString().slice(0, 3) : 'N/A'}
+            </Typography>
             </Typography>
             <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
               Original Language: {movieData.original_language}
             </Typography>
-            <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
+            <Typography sx={{ textAlign: "left",marginBottom: "10px", }}>
               Producer: {movieData.production_companies && movieData.production_companies.map(company => company.name).join(", ")}
             </Typography>
-            <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
-              Status: {movieData.status}
+            <Typography sx={{ textAlign: "left", display: "flex" }}>
+              Status:<Typography sx={{ textAlign: "left", marginLeft: "5px", width: '50%', marginBottom: "10px", color: movieData.status === "Released" ? "green" : "red", }}>{movieData.status}</Typography>
             </Typography>
             <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
-              Budget: {movieData.budget}$
+              Budget: {formattedBudget}
             </Typography>
             <Typography sx={{ textAlign: "left", marginBottom: "5px" }}>Overview:</Typography>
             <Typography sx={{ textAlign: "left", maxWidth: "900px" }}>{movieData.overview}</Typography>

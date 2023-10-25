@@ -20,39 +20,7 @@ const StyledSliderImage = styled.img`
 const StyledSliderWrapper = styled.div`
   width: 100%;
   position: relative;
-
-  .slick-arrow:before {
-    border-radius: 0px;
-    content: "";
-    width: 30px;
-    background-image: url(${arrowRight});
-    background-size: 100%;
-    background-repeat: no-repeat;
-    height: 30px;
-    position: absolute;
-    top: 5px;
-    left: 0;
-  } 
-
-  .slick-arrow {
-    position: absolute;
-    right: 100px;
-    z-index: 10;
-    width: 40px;
-    height: 40px;
-    transition: background-color 0.3s;
-    margin: 0;
-    padding: 0;
-  }
-
-  .slick-arrow:hover {
-    background-color: black;
-  }
-
-  .slick-prev {
-    transform: rotate(180deg);
-    left: 100px;
-  }
+  margin-bottom: 10px;
 `;
 
 const MainSlider = () => {

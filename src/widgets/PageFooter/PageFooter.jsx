@@ -19,12 +19,8 @@ const pages = [
     to: "movies"
   },
   {
-    name: 'Cartoons',
-    to: "cartoons"
-  },
-  {
-    name: 'Series And Shows',
-    to: "series-and-shows",
+    name: 'TV',
+    to: "tv"
   },
 ]
 
@@ -121,6 +117,12 @@ const Footer = () => {
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
+                '@media (max-width: 992px)': {
+                  fontSize: "17px",
+                },
+                '@media (max-width: 480px)': {
+                  fontSize: "13px",
+                },
               }}
             >
               CEVCODE
@@ -136,7 +138,16 @@ const Footer = () => {
                 </Button>
               ))}
             </Box>
-            <Typography sx={{ width: "auto", fontSize: "13px"}}>© 2023 CEVCODE. All rights reserved.</Typography>
+            <Typography sx={{
+            width: "auto", 
+            fontSize: "13px",
+            '@media (max-width: 768px)': {
+              fontSize: "10px",
+            },
+            '@media (max-width: 320px)': {
+              fontSize: "7px",
+            },
+            }}>© 2023 CEVCODE. All rights reserved.</Typography>
             <Box sx={{ flexGrow: 0 }}>
               <SecurityIcon sx={{ marginLeft: "15px" }} />
             </Box>
