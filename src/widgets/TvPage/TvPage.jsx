@@ -64,9 +64,6 @@ const MoviePage = () => {
           }
         })
         .catch(err => console.error(err));
-
-        
-
     }
   }, [movieId]);
 

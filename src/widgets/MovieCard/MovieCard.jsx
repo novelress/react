@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
-import { CardActionArea, dividerClasses } from '@mui/material';
+import { CardActionArea} from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const MovieCard = ({ movie, genres, voteAverage }) => {

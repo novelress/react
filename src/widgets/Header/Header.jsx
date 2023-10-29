@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import TextField from '@mui/material/TextField';
 import searchIcon from '../../Assets/Search/search.svg';
-import { useNavigate, useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import MovieSearchCard from "../MovieSearchCard/MovieSearchCard";
 import { AUTH_TOKEN } from "../../helpers/helpers";
 
@@ -123,7 +123,6 @@ const Header = () => {
         console.error(e);
       }
     }
-
   };
 
   const handleCloseNavMenu = () => {
@@ -164,6 +163,12 @@ const Header = () => {
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
+                '@media (max-width: 992px)': {
+                  fontSize: "17px",
+                },
+                '@media (max-width: 480px)': {
+                  fontSize: "13px",
+                }
               }}
             >
               CEVCODE
@@ -241,7 +246,7 @@ const Header = () => {
                 </Button>
               ))}
             </Box>
-            <Box ref={inputRef} sx={{ display: 'flex', alignItems: 'center', position: "relative" }}>
+            <Box ref={inputRef} sx={{ display: 'flex', alignItems: 'center', position: "relative", paddingTop: "10px" }}>
             {isSearchOpen && (
               <TextField
                 id="filled-search"
@@ -251,7 +256,7 @@ const Header = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 variant="filled"
                 fullWidth
-                sx={{ backgroundColor: '#ffffff', color: '#000000', }}
+                sx={{ backgroundColor: '#ffffff', color: '#000000',}}
               />
             )}
 

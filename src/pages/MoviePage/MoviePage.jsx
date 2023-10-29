@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Typography, Box, Tabs, Tab } from '@mui/material';
+import { AUTH_TOKEN } from "../../helpers/helpers";
 import styled from "@emotion/styled";
 import GradeSharpIcon from '@mui/icons-material/GradeSharp';
 
@@ -26,7 +27,7 @@ const MoviePage = () => {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzYTJkZGMzMDQxNzhhNzRmYzJmM2VhZTBkNjFjZjRhNiIsInN1YiI6IjY0ZjYwMWE1ZTBjYTdmMDEyZWI0YTQyZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nZyLiOf8OSawJuRNcNysdqymZRozN43fWndBy3zdfhs'
+        Authorization: `Bearer ${AUTH_TOKEN}`
       }
     };
 

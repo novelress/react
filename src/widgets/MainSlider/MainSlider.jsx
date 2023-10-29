@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import arrowRight from "../../Assets/MainSlider/arrowRight.svg";
 import MainSlider1 from "../../Assets/MainSlider/MainSlider1.webp";
 import MainSlider2 from "../../Assets/MainSlider/MainSlider2.webp";
 import MainSlider3 from "../../Assets/MainSlider/MainSlider3.webp";
