@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Alert, Snackbar } from '@mui/material';
 import TvCard from "../../widgets/TvCard/TvCard";
 import Slider from "react-slick";
 import { getBestRatingTvData, getPopularTvData, getUpcommingTvData } from "../../api/api";
@@ -11,6 +11,7 @@ const TV = () => {
   const [cartoonlist, setCartoonList] = useState(null);
   const [topRatedCartoonList, setTopRatedCartoonList] = useState(null);
   const [upcomingCartoonData, setUpcomingCartoonData] = useState(null);
+  const [error, setError] = useState(null);
   const sliderRef = useRef(null);
 
   useEffect(() => {
@@ -19,19 +20,25 @@ const TV = () => {
       .then((response) => {
         setCartoonList(response.results);
       })
-      .catch((err) => console.error(err));
+      .catch(err => {
+        setError(err);
+      })
 
     getBestRatingTvData()
      .then(response => {
         setTopRatedCartoonList(response.results);
      })
-     .catch(err => console.error(err));
+     .catch(err => {
+      setError(err);
+    })
 
      getUpcommingTvData()
     .then(response => {
         setUpcomingCartoonData(response.results);
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      setError(err);
+    })
 
   }, []);
 
@@ -93,6 +100,11 @@ const TV = () => {
         paddingLeft: "10px",
       },
     }}>
+    <Snackbar open={error !== null} autoHideDuration={6000} onClose={() => setError(null)}>
+      <Alert onClose={() => setError(null)} severity="error">
+        {error && error.message}
+      </Alert>
+    </Snackbar>
       <Typography sx={{ 
         textAlign: "center",
         fontSize: "25px", 

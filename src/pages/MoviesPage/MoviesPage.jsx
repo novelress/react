@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Alert, Snackbar } from '@mui/material';
 import MovieCard from "../../widgets/MovieCard/MovieCard";
 import Slider from "react-slick";
 import { getBestRatingMovieData, getGenres, getPopularMovieData, getUpcommingMovieData } from "../../api/api";
 import { StyledSliderWrapper } from "../HomePage/Home.styled"
+
 
 const Movies = () => {
 
@@ -11,10 +12,10 @@ const Movies = () => {
   const [topRatedMovieList, setTopRatedMovieList] = useState(null);
   const [upcomingMovieData, setUpcomingMovieData] = useState(null);
   const [genres, setGenres] = useState({});
+  const [error, setError] = useState(null);
   const sliderRef = useRef(null);
 
   useEffect(() => {
-
 
     getGenres()
       .then((response) => {
@@ -24,7 +25,9 @@ const Movies = () => {
         });
         setGenres(genreMap);
       })
-      .catch((err) => console.error(err));
+      .catch(err => {
+        setError(err);
+      })
 
       getPopularMovieData()
       .then((response) => {
@@ -35,13 +38,17 @@ const Movies = () => {
      .then(response => {
         setTopRatedMovieList(response.results);
      })
-     .catch(err => console.error(err));
+     .catch(err => {
+      setError(err);
+    })
 
      getUpcommingMovieData()
     .then(response => {
         setUpcomingMovieData(response.results);
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      setError(err);
+    })
 
   }, []);
 
@@ -102,6 +109,12 @@ const Movies = () => {
         paddingLeft: "10px",
       },
     }}>
+    <Snackbar open={error !== null} autoHideDuration={6000} onClose={() => setError(null)}>
+      <Alert onClose={() => setError(null)} severity="error">
+        {error && error.message}
+      </Alert>
+    </Snackbar>
+
       <Typography sx={{
         textAlign: "center",
         fontSize: "25px",

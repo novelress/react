@@ -4,8 +4,6 @@ import { Typography, Box, Tabs, Tab } from '@mui/material';
 import styled from "@emotion/styled";
 import GradeSharpIcon from '@mui/icons-material/GradeSharp';
 import { getTvCastData, getTvData, getTvVideoData } from '../../api/api';
-
-// переименовать и переместить
  
 const StyledCompanyLogo = styled.img`
   width: 100%;

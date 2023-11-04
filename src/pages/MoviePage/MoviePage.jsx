@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { Typography, Box, Tabs, Tab } from '@mui/material';
-import { AUTH_TOKEN } from "../../helpers/helpers";
+import { Typography, Box, Tabs, Tab, Alert, Snackbar } from '@mui/material';
 import { StyledCompanyLogo } from './MoviePage.styled';
 import GradeSharpIcon from '@mui/icons-material/GradeSharp';
-
 import { getMovieData, getCastMovieData, getMovieTrailerData } from '../../api/api';
 
 
@@ -19,23 +17,18 @@ const MoviePage = () => {
   const [movieVideoData, setMovieVideoData] = useState([]);
   const [movieVideoSiteData, setMovieVideoSiteData] = useState([]);
   const [activeSection, setActiveSection] = useState(0);
+  const [error, setError] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${AUTH_TOKEN}`
-      }
-    };
 
     if (typeof movieId === 'string') {
       setIsLoading(true);
       getMovieData(movieId)
         .then(response => setMovieData(response))
-        // необходимо обрабатывать ошибки тоесть рисовать какую то страницу ошибки или давать какую то нотификацию пользователю
-        .catch(err => console.error(err))
+        .catch(err => {
+          setError(err);
+        })        
         .finally(() => {
           setIsLoading(false);
         });
@@ -205,6 +198,12 @@ const MoviePage = () => {
 
   return (
     <Box>
+      <Snackbar open={error !== null} autoHideDuration={6000} onClose={() => setError(null)}>
+        <Alert onClose={() => setError(null)} severity="error">
+          {error && error.message}
+        </Alert>
+      </Snackbar>
+
       <Box
         sx={{
           backgroundImage: `url('https://image.tmdb.org/t/p/w500${movieData.backdrop_path}')`,

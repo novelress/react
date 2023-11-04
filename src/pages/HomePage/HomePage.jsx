@@ -1,27 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Alert, Snackbar } from '@mui/material';
 import MovieCard from "../../widgets/MovieCard/MovieCard";
 import TvCard from "../../widgets/TvCard/TvCard";
 import Slider from "react-slick";
 import { StyledSliderWrapper } from "./Home.styled"
-import arrowRight from "../../Assets/arrowRight.svg";
 import MainSlider from '../../widgets/MainSlider/MainSlider';
 import { getGenres, getMovieList, getTvSeriesList } from "../../api/api";
 import MainSlider1 from "../../Assets/MainSlider/MainSlider1.webp";
 import MainSlider2 from "../../Assets/MainSlider/MainSlider2.webp";
 import MainSlider3 from "../../Assets/MainSlider/MainSlider3.webp";
 
-// styled компоненты необходимо вынести в отдельный файл Home.styled.js
-
-
-
-
 const HomePage = () => {
   const [movieslist, setMoviesList] = useState([]);
-  const [genres, setGenres] = useState({}); // всегда дефолтное значение для обьектов - null
+  const [genres, setGenres] = useState(null);
   const [tvSeriesList, setTvSeriesList] = useState([]);
   const sliderRef = useRef(null);
   const images = [MainSlider1, MainSlider2, MainSlider3];
+  const [error, setError] = useState(null);
 
   useEffect(() => {
 
@@ -33,17 +28,26 @@ const HomePage = () => {
         });
         setGenres(genreMap);
       })
-      .catch((err) => console.error(err));
+      .catch(err => {
+        setError(err);
+      })
+      
       getMovieList()
       .then((response) => {
         setMoviesList(response.results);
       })
-      .catch((err) => console.error(err));
+      .catch(err => {
+        setError(err);
+      })
+      
       getTvSeriesList()
         .then((response) => {
           setTvSeriesList(response.results);
         })
-        .catch((err) => console.error(err));
+        .catch(err => {
+          setError(err);
+        })
+        
   }, []);
 
   if (!movieslist.length && !tvSeriesList.length) {
@@ -87,6 +91,11 @@ const HomePage = () => {
 
   return (
     <Box sx={{ minHeight: 'calc(100vh - 140px)', boxShadow: '10px 0 10px -10px black, -10px 0 10px -10px black', }}>
+      <Snackbar open={error !== null} autoHideDuration={6000} onClose={() => setError(null)}>
+        <Alert onClose={() => setError(null)} severity="error">
+          {error && error.message}
+        </Alert>
+      </Snackbar>
       <MainSlider images={images} />
         <Box sx={{ 
           maxWidth: "1050px", 
