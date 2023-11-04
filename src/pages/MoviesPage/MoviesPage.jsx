@@ -1,43 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AUTH_TOKEN } from "../../helpers/helpers";
 import { Typography, Box } from "@mui/material";
 import MovieCard from "../../widgets/MovieCard/MovieCard";
 import Slider from "react-slick";
-import styled from "@emotion/styled";
-import arrowRight from "../../Assets/arrowRight.svg";
-
-
-const StyledSliderWrapper = styled.div`
-  width: 100%;
-  position: relative;
-
-
-
-  .slick-arrow:before {
-    border-radius: 0px;
-    content: "";
-    width: 30px;
-  } 
-
-  .slick-arrow {
-    position: absolute;
-    top: -10px;
-    right: 5px;
-    left: auto;
-    z-index: 10;
-    width: 20px;
-    height: 20px;
-    background-image: url(${arrowRight});
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-
-  .slick-prev {
-    right: 30px;
-    top: -20px;
-    transform: scale(-1, 1);
-  }
-`;
+import { getBestRatingMovieData, getGenres, getPopularMovieData, getUpcommingMovieData } from "../../api/api";
+import { StyledSliderWrapper } from "../HomePage/Home.styled"
 
 const Movies = () => {
 
@@ -48,19 +14,9 @@ const Movies = () => {
   const sliderRef = useRef(null);
 
   useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-      },
-    };
 
-    fetch(
-      "https://api.themoviedb.org/3/genre/movie/list?language=en-US",
-      options
-    )
-      .then((response) => response.json())
+
+    getGenres()
       .then((response) => {
         const genreMap = {};
         response.genres.forEach((genre) => {
@@ -70,25 +26,18 @@ const Movies = () => {
       })
       .catch((err) => console.error(err));
 
-    fetch(
-      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-      options
-    )
-      .then((response) => response.json())
+      getPopularMovieData()
       .then((response) => {
         setMoviesList(response.results);
       })
       .catch((err) => console.error(err));
-
-      fetch('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1', options)
-     .then(response => response.json())
+      getBestRatingMovieData()
      .then(response => {
         setTopRatedMovieList(response.results);
      })
      .catch(err => console.error(err));
 
-     fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
-    .then(response => response.json())
+     getUpcommingMovieData()
     .then(response => {
         setUpcomingMovieData(response.results);
     })
@@ -97,7 +46,7 @@ const Movies = () => {
   }, []);
 
   if (!movieslist) {
-    return <p>Loading...</p>;
+    return <Box sx={{ height: "calc(100vh - 70px)", textAlign: "center", fontSize: "30px", }}><Typography>Loading...</Typography></Box>
   }
 
 
@@ -110,8 +59,41 @@ const Movies = () => {
     slidesToScroll: 5,
   };
   
+  const renderPopularMoviesList = () => {
+    return (
+      <StyledSliderWrapper>
+        <Slider className="movies-slider" {...settings} ref={sliderRef}>
+          {movieslist.map((movie, index) => (
+            <MovieCard movie={movie} key={movie.id} genres={genres} voteAverage={movie.vote_average} />
+          ))}
+        </Slider>
+      </StyledSliderWrapper>
+    )
+  }
 
+  const renderTopRatedMovieList = () => {
+    return (
+      <StyledSliderWrapper>
+        <Slider className="movies-slider" {...settings} ref={sliderRef}>
+          {topRatedMovieList.map((movie, index) => (
+            <MovieCard movie={movie} key={movie.id} genres={genres} voteAverage={movie.vote_average} />
+          ))}
+        </Slider>
+      </StyledSliderWrapper>
+    )
+  }
 
+  const renderUpcommingMovieList = () => {
+    return (
+      <StyledSliderWrapper>
+        <Slider className="movies-slider" {...settings} ref={sliderRef}>
+          {upcomingMovieData.map((movie, index) => (
+            <MovieCard movie={movie} key={movie.id} genres={genres} voteAverage={movie.vote_average} />
+          ))}
+        </Slider>
+      </StyledSliderWrapper>
+    )
+  }
   return ( 
     <Box sx={{ 
       maxWidth: "1050px", 
@@ -153,13 +135,7 @@ const Movies = () => {
               Popular
             </Typography>
           </Box>
-          <StyledSliderWrapper>
-            <Slider className="movies-slider" {...settings} ref={sliderRef}>
-              {movieslist.map((movie, index) => (
-                <MovieCard movie={movie} key={index} genres={genres} voteAverage={movie.vote_average} />
-              ))}
-            </Slider>
-          </StyledSliderWrapper>
+          {renderPopularMoviesList()}
         </Box>
       )}
   
@@ -181,13 +157,7 @@ const Movies = () => {
               Best Rating
             </Typography>
           </Box>
-          <StyledSliderWrapper>
-            <Slider className="movies-slider" {...settings} ref={sliderRef}>
-              {topRatedMovieList.map((movie, index) => (
-                <MovieCard movie={movie} key={index} genres={genres} voteAverage={movie.vote_average} />
-              ))}
-            </Slider>
-          </StyledSliderWrapper>
+            {renderTopRatedMovieList()}
         </Box>
       )}
   
@@ -209,13 +179,7 @@ const Movies = () => {
               Upсoming
             </Typography>
           </Box>
-          <StyledSliderWrapper>
-            <Slider className="movies-slider" {...settings} ref={sliderRef}>
-              {upcomingMovieData.map((movie, index) => (
-                <MovieCard movie={movie} key={index} genres={genres} voteAverage={movie.vote_average} />
-              ))}
-            </Slider>
-          </StyledSliderWrapper>
+          {renderUpcommingMovieList()}
         </Box>
       )}
     </Box>

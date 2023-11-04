@@ -1,64 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AUTH_TOKEN } from "../../helpers/helpers";
 import { Typography, Box } from "@mui/material";
 import MovieCard from "../../widgets/MovieCard/MovieCard";
 import TvCard from "../../widgets/TvCard/TvCard";
 import Slider from "react-slick";
-import styled from "@emotion/styled";
+import { StyledSliderWrapper } from "./Home.styled"
 import arrowRight from "../../Assets/arrowRight.svg";
 import MainSlider from '../../widgets/MainSlider/MainSlider';
+import { getGenres, getMovieList, getTvSeriesList } from "../../api/api";
+import MainSlider1 from "../../Assets/MainSlider/MainSlider1.webp";
+import MainSlider2 from "../../Assets/MainSlider/MainSlider2.webp";
+import MainSlider3 from "../../Assets/MainSlider/MainSlider3.webp";
 
-const StyledSliderWrapper = styled.div`
-  width: 100%;
-  position: relative;
-
-
-  .slick-arrow:before {
-    border-radius: 0px;
-    content: "";
-    width: 30px;
-  }
-  .slick-arrow {
-    position: absolute;
-    top: -10px;
-    right: 20px;
-    left: auto;
-    z-index: 10;
-    width: 20px;
-    height: 20px;
-    background-image: url(${arrowRight});
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-
-  .slick-prev {
-    right: 45px;
-    top: -20px;
-    transform: scale(-1, 1);
-  }
-`;
+// styled компоненты необходимо вынести в отдельный файл Home.styled.js
 
 
-const Home = () => {
+
+
+const HomePage = () => {
   const [movieslist, setMoviesList] = useState([]);
-  const [genres, setGenres] = useState({});
+  const [genres, setGenres] = useState({}); // всегда дефолтное значение для обьектов - null
   const [tvSeriesList, setTvSeriesList] = useState([]);
   const sliderRef = useRef(null);
+  const images = [MainSlider1, MainSlider2, MainSlider3];
 
   useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-      },
-    };
 
-    fetch(
-      "https://api.themoviedb.org/3/genre/movie/list?language=en-US",
-      options
-    )
-      .then((response) => response.json())
+    getGenres()
       .then((response) => {
         const genreMap = {};
         response.genres.forEach((genre) => {
@@ -67,22 +34,12 @@ const Home = () => {
         setGenres(genreMap);
       })
       .catch((err) => console.error(err));
-
-    fetch(
-      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-      options
-    )
-      .then((response) => response.json())
+      getMovieList()
       .then((response) => {
         setMoviesList(response.results);
       })
       .catch((err) => console.error(err));
-
-      fetch(
-        "https://api.themoviedb.org/3/tv/popular?language=en-US&page=1",
-        options
-      )
-        .then((response) => response.json())
+      getTvSeriesList()
         .then((response) => {
           setTvSeriesList(response.results);
         })
@@ -90,9 +47,32 @@ const Home = () => {
   }, []);
 
   if (!movieslist.length && !tvSeriesList.length) {
-    return <p>Loading...</p>;
+    return <Box sx={{ height: "calc(100vh - 70px)", textAlign: "center", fontSize: "30px", }}><Typography>Loading...</Typography></Box>
   }
 
+  const renderPopularMoviesSlider = () => {
+    return (
+      <StyledSliderWrapper>
+        <Slider className="movies-slider" {...settings} ref={sliderRef}>
+          {movieslist.map((movie, index) => (
+            <MovieCard movie={movie} key={movie.id} genres={genres} voteAverage={movie.vote_average} />
+          ))}
+        </Slider>
+      </StyledSliderWrapper>
+    )
+  }
+
+  const renderPopularTvSlider = () => {
+    return (
+      <StyledSliderWrapper>
+              <Slider className="movies-slider" {...settings} ref={sliderRef}>
+                {tvSeriesList.map((tv, index) => (
+                  <TvCard tv={tv} key={tv.id} voteAverage={tv.vote_average} />
+                ))}
+              </Slider>
+      </StyledSliderWrapper>
+    )
+  }
 
   const settings = {
     dots: false,
@@ -107,7 +87,7 @@ const Home = () => {
 
   return (
     <Box sx={{ minHeight: 'calc(100vh - 140px)', boxShadow: '10px 0 10px -10px black, -10px 0 10px -10px black', }}>
-      <MainSlider></MainSlider>
+      <MainSlider images={images} />
         <Box sx={{ 
           maxWidth: "1050px", 
           margin: "0 auto", 
@@ -132,13 +112,8 @@ const Home = () => {
               Popular Movie
             </Typography>
           </Box>
-          <StyledSliderWrapper>
-            <Slider className="movies-slider" {...settings} ref={sliderRef}>
-              {movieslist.map((movie, index) => (
-                <MovieCard movie={movie} key={index} genres={genres} voteAverage={movie.vote_average} />
-              ))}
-            </Slider>
-          </StyledSliderWrapper>
+
+          {renderPopularMoviesSlider()}
 
           <Box sx={{ display: "flex", justifyContent: "space-between", paddingRight: '5px' }}>
             <Typography sx={{ 
@@ -155,16 +130,10 @@ const Home = () => {
             }}>
               Popular TV</Typography>
           </Box>
-          <StyledSliderWrapper>
-            <Slider className="movies-slider" {...settings} ref={sliderRef}>
-              {tvSeriesList.map((movie, index) => (
-                <TvCard movie={movie} key={index} voteAverage={movie.vote_average} />
-              ))}
-            </Slider>
-          </StyledSliderWrapper>
+          {renderPopularTvSlider()}
         </Box>
     </Box>
   );
 };
 
-export default Home;
+export default HomePage;

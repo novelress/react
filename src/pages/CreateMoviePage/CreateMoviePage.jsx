@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import MovieCreateForm from "../../widgets/MovieCreateForm/MovieCreateForm"
 
-const CreateMovie = () => {
+const CreateMoviePage = () => {
     return (
         <Box>
             <MovieCreateForm />
@@ -11,4 +11,4 @@ const CreateMovie = () => {
 
 }
 
-export default CreateMovie;
+export default CreateMoviePage;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import Home from './pages/Home/Home';
+import Home from './pages/HomePage/HomePage';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -14,58 +14,17 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import TV from './pages/TV/TV';
-import Movies from './pages/Movies/Movies';
+import TV from './pages/TVPage/TVPage';
+import Movies from './pages/MoviesPage/MoviesPage';
 import MoviePage from './pages/MoviePage/MoviePage';
-import TvPage from './widgets/TvPage/TvPage';
-import CreateMovie from './pages/CreateMovie/CreateMovie';
+import TvMainPage from './pages/TvMainPage/TvMainPage';
+import CreateMovie from './pages/CreateMoviePage/CreateMoviePage';
 import Footer from "./widgets/PageFooter/PageFooter";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './helpers/theme';
 
-const theme = createTheme({
-  components: {
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'black',
-          },
-          '& .MuiInputBase-input': {
-            color: 'black', 
-          },
-          '& .MuiOutlinedInput-root.Mui-focused': {
-            boxShadow: '0 0 10px 3px rgba(0, 0, 0, 0.5)',
-          },
-          '& .MuiInputLabel-root': {
-            color: 'black',
-          },
-          '& .MuiInputLabel-root.Mui-focused': {
-            color: 'black',
-          },
-        },
-      },
-    },
-    MuiTabs: {
-      styleOverrides: {
-        root: {
-          ".MuiTabs-indicator": {
-            backgroundColor: "black",
-          }
-        }
-      }
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          "&.Mui-selected": {
-            color: "black",
-            
-          },
-        },
-      },
-    },
-  },
-});
+
+// необходимо подключить prettier для cra
 
 const App = () => {
   return (
@@ -73,7 +32,7 @@ const App = () => {
   <BrowserRouter basename="/">
     <ThemeProvider theme={theme}>
       <Box className="App" sx={{ height: "100vh" }}>
-        <Box 
+        <Box
         sx={{
           maxWidth: "70%",
           margin: "0 auto", 
@@ -90,7 +49,7 @@ const App = () => {
             <Route path="/tv" element={<TV/>} />
             <Route path="/" element={<Home />}/>
             <Route path="/moviePage/:movieId" element={<MoviePage />} />
-            <Route path="/tvPage/:movieId" element={<TvPage />} />
+            <Route path="/tvPage/:tvId" element={<TvMainPage />} />
             <Route path="/create-movie" element={<CreateMovie />} />
           </Routes>
           <Footer />

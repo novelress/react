@@ -7,8 +7,8 @@ import Rating from '@mui/material/Rating';
 import { CardActionArea } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-const TvCard = ({ movie, voteAverage}) => {
-  const { id, poster_path, name, first_air_date } = movie;
+const TvCard = ({ tv, voteAverage}) => {
+  const { id, poster_path, name, first_air_date } = tv;
   const cardStyle = {
     width: '90%',
     marginTop: '10px',
