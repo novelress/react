@@ -98,12 +98,12 @@ const HomePage = () => {
       </Snackbar>
       <MainSlider images={images} />
         <Box sx={{ 
-          maxWidth: "1050px", 
-          margin: "0 auto", 
-          '@media (max-width: 992px)': {
-            paddingLeft: "10px",
-            paddingRight: "10px",
-          },
+            maxWidth: "1050px", 
+            margin: "0 auto", 
+            '@media (max-width: 992px)': {
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            },
           }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", paddingRight: '5px' }}>
             <Typography sx={{ 

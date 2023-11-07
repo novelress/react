@@ -11,7 +11,7 @@ import { getMovieData, getCastMovieData, getMovieTrailerData } from '../../api/a
 
 const MoviePage = () => {
   const { movieId } = useParams();
-  const [movieData, setMovieData] = useState(null); // проверить по всему проэкту что если тип данных массив деф значение должно быть массив
+  const [movieData, setMovieData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [castData, setCastData] = useState([]);
   const [movieVideoData, setMovieVideoData] = useState([]);
@@ -73,7 +73,6 @@ const MoviePage = () => {
     setActiveSection(newValue);
   };
 
-  // все места где у меня используеться map или же где у меня тернарники используються выносить в отдельные функции
 
   const renderVideo = () => {
     if(movieVideoData.length > 0 && movieVideoSiteData === "YouTube") {
@@ -93,95 +92,97 @@ const MoviePage = () => {
   }
 
   const renderTabs = () => {
-    <Box sx={{ padding: '30px 50px' }}>
-    <Box>
-      <Box sx={{ display: "flex", alignItems: "center", paddingBottom: "20px" }}>
-      <Tabs sx={{ marginBottom: "10px", "& .Mui-selected": { color: "black" },}} value={activeSection} onChange={handleTabChange}>
-        <Tab label="DESCRIPTION" />
-        <Tab label="PERSONS AND TEAMS" />
-      </Tabs>
+    return(
+        <Box sx={{ padding: '30px 50px' }}>
+        <Box>
+          <Box sx={{ display: "flex", alignItems: "center", paddingBottom: "20px" }}>
+          <Tabs sx={{ marginBottom: "10px", "& .Mui-selected": { color: "black" },}} value={activeSection} onChange={handleTabChange}>
+            <Tab label="DESCRIPTION" />
+            <Tab label="PERSONS AND TEAMS" />
+          </Tabs>
 
-      </Box>
-    </Box>
-    {activeSection === 0 && (
-      <Box sx={{ padding: '30px 50px' }}>
-        <Typography sx={{ textAlign: "left", marginBottom: "10px", fontWeight: "bold", color: "rgba(0, 0, 0, 0.7)" }}>
-          {movieData.release_date.slice(0, 4)},{movieData.genres.map(genre => genre.name).join(", ")}
-        </Typography>
-        <Box sx={{ display: "flex" }}>
-          <Typography sx={{ marginBottom: "10px", fontSize: "13px", textAlign: "left", width: "5%", display: "flex", justifyContent: "center", padding: "2px 5px 0", border: "1px solid #ccc", borderRadius: "3px", color: "gray", marginRight: "5px", '@media (max-width: 992px)': { width: "25%", }, }}>
-            Full HD
-          </Typography>
-          <Typography sx={{ marginBottom: "10px", fontSize: "13px", textAlign: "left", width: "5%", display: "flex", justifyContent: "center", padding: "2px 5px 0", border: "1px solid #ccc", borderRadius: "3px", color: "gray", '@media (max-width: 992px)': { width: "25%", },}}>
-            {movieData.runtime ? `${Math.floor(movieData.runtime / 60)}h ${movieData.runtime % 60}m` : 'N/A'}
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center"}}>
-        <Typography sx={{ textAlign: "left", maxWidth: "50px", }}>
-          Rating: 
-        </Typography>
-        <Typography sx={{ textAlign: "left", marginLeft: "5px", width: '50%', color: movieData.vote_average > '6.999' ? "green" : movieData.vote_average > '3.999' ? "orange" : "red", }}>{movieData.vote_average ? movieData.vote_average.toString().slice(0, 3) : 'N/A'}
-        </Typography>
-        </Box>
-        <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
-          Original Language: {movieData.original_language}
-        </Typography>
-        <Typography sx={{ textAlign: "left",marginBottom: "10px", }}>
-          Producer: {movieData.production_companies && movieData.production_companies.map(company => company.name).join(", ")}
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center"}}>
-        <Typography sx={{ textAlign: "left", maxWidth: "50px" }}>
-          Status:
-        </Typography>
-        <Typography sx={{ textAlign: "left", marginLeft: "5px", width: 'auto', color: movieData.status === "Released" ? "green" : "red", }}>{movieData.status}</Typography>
-        </Box>
-        <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
-          Budget: {formattedBudget}
-        </Typography>
-        <Typography sx={{ textAlign: "left", marginBottom: "5px" }}>Overview:</Typography>
-        <Typography sx={{ textAlign: "left", maxWidth: "900px" }}>{movieData.overview}</Typography>
-      </Box>
-
-    )}
-    {activeSection === 1 && (
-      <Box>
-          <Typography sx={{ marginBottom: "20px" }}>Actors</Typography>
-          <Box sx={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
-            {castData.map(actor => (
-              <Box sx={{ display: "flex", alignItems: "center", width: "220px", height: "40px", marginBottom: "20px" }}>
-            <Box sx={{ height: "100%", width: "22%", display: "flex", justifyContent: "center", alignItems: "center", background: "#CCCCCC", marginRight: "10px", backgroundImage: actor.profile_path ? `url("https://image.tmdb.org/t/p/w200${actor.profile_path}")` : 'none', backgroundSize: "cover", backgroundPosition: "center", }} >
-              {actor.profile_path ? null : <GradeSharpIcon />}
-            </Box>
-
-                <Box sx={{ height: "100%" }}>
-                  <Typography sx={{ width: "100%", fontSize: "13px" }}>{actor.name}</Typography>
-                  <Typography sx={{ width: "100%", fontSize: "10px", color: "#66666C", textAlign: "left" }}>{actor.name}</Typography>
-                </Box>
-              </Box>
-            ))}
-            
           </Box>
-          <Typography sx={{ marginBottom: "20px" }}>Product Companies</Typography>
-          <Box sx={{ display: "flex" }}> 
-            {movieData.production_companies.map(company => (
-            <Box sx={{ display: "flex", alignItems: "center", width: "220px", height: "50px", marginBottom: "20px", }} >
-              <Box sx={{ height: "100%", width: "22%", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "10px", }}>
-                {company.logo_path ? (
-                <StyledCompanyLogo src={`https://image.tmdb.org/t/p/w200${company.logo_path}`} alt={company.name}/>
-                ) : (
-                  <GradeSharpIcon />
-                )}
-              </Box>
-              <Box sx={{ height: "100%" }}>
-                <Typography sx={{ width: "100%", fontSize: "13px" }}>{company.name}</Typography>
-                <Typography sx={{ width: "100%", fontSize: "10px", color: "#66666C", textAlign: "left" }}>{company.origin_country}</Typography>
-              </Box>
+        </Box>
+        {activeSection === 0 && (
+          <Box sx={{ padding: '30px 50px' }}>
+            <Typography sx={{ textAlign: "left", marginBottom: "10px", fontWeight: "bold", color: "rgba(0, 0, 0, 0.7)" }}>
+              {movieData.release_date.slice(0, 4)},{movieData.genres.map(genre => genre.name).join(", ")}
+            </Typography>
+            <Box sx={{ display: "flex" }}>
+              <Typography sx={{ marginBottom: "10px", fontSize: "13px", textAlign: "left", width: "5%", display: "flex", justifyContent: "center", padding: "2px 5px 0", border: "1px solid #ccc", borderRadius: "3px", color: "gray", marginRight: "5px", '@media (max-width: 992px)': { width: "25%", }, }}>
+                Full HD
+              </Typography>
+              <Typography sx={{ marginBottom: "10px", fontSize: "13px", textAlign: "left", width: "5%", display: "flex", justifyContent: "center", padding: "2px 5px 0", border: "1px solid #ccc", borderRadius: "3px", color: "gray", '@media (max-width: 992px)': { width: "25%", },}}>
+                {movieData.runtime ? `${Math.floor(movieData.runtime / 60)}h ${movieData.runtime % 60}m` : 'N/A'}
+              </Typography>
             </Box>
-        ))}
-       </Box>
+            <Box sx={{ display: "flex", alignItems: "center"}}>
+            <Typography sx={{ textAlign: "left", maxWidth: "50px", }}>
+              Rating: 
+            </Typography>
+            <Typography sx={{ textAlign: "left", marginLeft: "5px", width: '50%', color: movieData.vote_average > '6.999' ? "green" : movieData.vote_average > '3.999' ? "orange" : "red", }}>{movieData.vote_average ? movieData.vote_average.toString().slice(0, 3) : 'N/A'}
+            </Typography>
+            </Box>
+            <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
+              Original Language: {movieData.original_language}
+            </Typography>
+            <Typography sx={{ textAlign: "left",marginBottom: "10px", }}>
+              Producer: {movieData.production_companies && movieData.production_companies.map(company => company.name).join(", ")}
+            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center"}}>
+            <Typography sx={{ textAlign: "left", maxWidth: "50px" }}>
+              Status:
+            </Typography>
+            <Typography sx={{ textAlign: "left", marginLeft: "5px", width: 'auto', color: movieData.status === "Released" ? "green" : "red", }}>{movieData.status}</Typography>
+            </Box>
+            <Typography sx={{ textAlign: "left", marginBottom: "10px" }}>
+              Budget: {formattedBudget}
+            </Typography>
+            <Typography sx={{ textAlign: "left", marginBottom: "5px" }}>Overview:</Typography>
+            <Typography sx={{ textAlign: "left", maxWidth: "900px" }}>{movieData.overview}</Typography>
+          </Box>
+
+        )}
+        {activeSection === 1 && (
+          <Box>
+              <Typography sx={{ marginBottom: "20px" }}>Actors</Typography>
+              <Box sx={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
+                {castData.map(actor => (
+                  <Box sx={{ display: "flex", alignItems: "center", width: "220px", height: "40px", marginBottom: "20px" }}>
+                <Box sx={{ height: "100%", width: "22%", display: "flex", justifyContent: "center", alignItems: "center", background: "#CCCCCC", marginRight: "10px", backgroundImage: actor.profile_path ? `url("https://image.tmdb.org/t/p/w200${actor.profile_path}")` : 'none', backgroundSize: "cover", backgroundPosition: "center", }} >
+                  {actor.profile_path ? null : <GradeSharpIcon />}
+                </Box>
+
+                    <Box sx={{ height: "100%" }}>
+                      <Typography sx={{ width: "100%", fontSize: "13px" }}>{actor.name}</Typography>
+                      <Typography sx={{ width: "100%", fontSize: "10px", color: "#66666C", textAlign: "left" }}>{actor.name}</Typography>
+                    </Box>
+                  </Box>
+                ))}
+                
+              </Box>
+              <Typography sx={{ marginBottom: "20px" }}>Product Companies</Typography>
+              <Box sx={{ display: "flex" }}> 
+                {movieData.production_companies.map(company => (
+                <Box sx={{ display: "flex", alignItems: "center", width: "220px", height: "50px", marginBottom: "20px", }} >
+                  <Box sx={{ height: "100%", width: "22%", display: "flex", justifyContent: "center", alignItems: "center", marginRight: "10px", }}>
+                    {company.logo_path ? (
+                    <StyledCompanyLogo src={`https://image.tmdb.org/t/p/w200${company.logo_path}`} alt={company.name}/>
+                    ) : (
+                      <GradeSharpIcon />
+                    )}
+                  </Box>
+                  <Box sx={{ height: "100%" }}>
+                    <Typography sx={{ width: "100%", fontSize: "13px" }}>{company.name}</Typography>
+                    <Typography sx={{ width: "100%", fontSize: "10px", color: "#66666C", textAlign: "left" }}>{company.origin_country}</Typography>
+                  </Box>
+                </Box>
+            ))}
+          </Box>
+          </Box>
+        )}
       </Box>
-    )}
-  </Box>
+    );
   }
 
   if (isLoading) {

@@ -105,6 +105,7 @@ const Movies = () => {
     <Box sx={{ 
       maxWidth: "1050px", 
       margin: "0 auto",
+      minHeight: "calc(100vh - 70px)",
       '@media (max-width: 992px)': {
         paddingLeft: "10px",
       },
